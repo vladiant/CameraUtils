@@ -1,8 +1,7 @@
 #include <cstddef>
 #include <iostream>
-#include <string>
-
 #include <opencv/cv.hpp>
+#include <string>
 
 int main(int argc, char* argv[]) {
   if (argc <= 1) {

@@ -8,22 +8,19 @@
  */
 
 #include <assert.h>
+#include <errno.h>
+#include <fcntl.h>  /* low-level i/o */
+#include <getopt.h> /* getopt_long() */
+#include <linux/videodev2.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <getopt.h> /* getopt_long() */
-
-#include <errno.h>
-#include <fcntl.h> /* low-level i/o */
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include <linux/videodev2.h>
 
 #define FOUR (4)
 #define ALIGN_TO_FOUR(VAL) (((VAL) + FOUR - 1) & ~(FOUR - 1))

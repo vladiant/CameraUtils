@@ -3,18 +3,16 @@
  * http://blog.csdn.net/shaolyh/article/details/6583226
  * http://blog.csdn.net/zgyulongfei/article/details/7526249
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
 #include <errno.h>
-
 #include <fcntl.h>
 #include <linux/videodev2.h>
 #include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <time.h>
 #include <unistd.h>
 
 #define FOUR (4)

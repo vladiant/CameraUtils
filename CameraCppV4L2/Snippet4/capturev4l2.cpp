@@ -12,6 +12,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 uint8_t* gBuffer = nullptr;
 struct v4l2_format gFmt = {0};
@@ -168,28 +169,26 @@ int capture_image(int fd) {
   printf("saving image\n");
 
   if (V4L2_PIX_FMT_MJPEG == gFmt.fmt.pix.pixelformat) {
-    IplImage* frame = nullptr;
-    CvMat cvmat =
-        cvMat(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC3, (void*)gBuffer);
-    frame = cvDecodeImage(&cvmat, 1);
-    cvNamedWindow("window", CV_WINDOW_AUTOSIZE);
-    cvShowImage("window", frame);
-    cvWaitKey(0);
-    cvSaveImage("image.jpg", frame, 0);
+    cv::Mat cvmat(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC3,
+                  (void*)gBuffer);
+    cv::Mat frame = cv::imdecode(cvmat, cv::IMREAD_COLOR);
+    cv::namedWindow("window", cv::WINDOW_AUTOSIZE);
+    cv::imshow("window", frame);
+    cv::imwrite("image.jpg", frame);
 
   } else if (V4L2_PIX_FMT_YUYV == gFmt.fmt.pix.pixelformat) {
-    CvMat cvmat1 =
-        cvMat(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC2, (void*)gBuffer);
-    CvMat* cvmat =
-        cvCreateMat(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC3);
-    cvCvtColor(&cvmat1, cvmat, CV_YUV2RGB_YVYU);
-    cvNamedWindow("window", CV_WINDOW_AUTOSIZE);
-    cvShowImage("window", cvmat);
-    cvSaveImage("image.bmp", cvmat, 0);
+    cv::Mat cvmat1(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC2,
+                   (void*)gBuffer);
+    cv::Mat cvmat(gFmt.fmt.pix.height, gFmt.fmt.pix.width, CV_8UC3);
+    cv::cvtColor(cvmat1, cvmat, cv::COLOR_YUV2RGB_YVYU);
+
+    cv::namedWindow("window", cv::WINDOW_AUTOSIZE);
+    cv::imshow("window", cvmat);
+    cv::imwrite("image.bmp", cvmat);
   }
 
   printf("press any key to continue...\n");
-  cvWaitKey(0);
+  cv::waitKey(0);
 
   return 0;
 }
